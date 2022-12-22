@@ -1,4 +1,5 @@
 import Head from "next/head";
+import supabase from "../utils/supabase";
 
 export default function Home() {
   return (
@@ -16,4 +17,18 @@ export default function Home() {
       </main>
     </>
   );
+}
+
+export async function getServerSideProps() {
+  const { data: donors, error } = await supabase.from("donors").select("*");
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return {
+    props: {
+      donors,
+    },
+  };
 }
